@@ -49,6 +49,16 @@ html {
     z-index: 1;
 }
 
+.ganesh-blessing {
+    margin-bottom: 1rem;
+}
+
+.ganesh-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
 .couple-names {
     font-family: 'Dancing Script', cursive;
     font-size: 4rem;
