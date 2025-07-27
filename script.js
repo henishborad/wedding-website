@@ -139,8 +139,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateAdminStats() {
         const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
+        const attendingRsvps = rsvps.filter(r => r.attendance === 'yes');
+        const totalGuests = attendingRsvps.reduce((sum, rsvp) => sum + parseInt(rsvp.guestCount || 1), 0);
+        
         document.getElementById('totalRsvps').textContent = rsvps.length;
-        document.getElementById('attendingCount').textContent = rsvps.filter(r => r.attendance === 'yes').length;
+        document.getElementById('attendingCount').textContent = totalGuests;
         document.getElementById('notAttendingCount').textContent = rsvps.filter(r => r.attendance === 'no').length;
     }
 
@@ -220,10 +223,11 @@ function exportRSVPs() {
 function clearRSVPs() {
     if (confirm('Clear all RSVPs?')) {
         localStorage.removeItem('weddingRSVPs');
-        // Check if admin elements exist before updating
-        if (document.getElementById('totalRsvps')) {
-            updateAdminStats();
-        }
+        // Update admin stats to show zeros
+        const rsvps = [];
+        document.getElementById('totalRsvps').textContent = '0';
+        document.getElementById('attendingCount').textContent = '0';
+        document.getElementById('notAttendingCount').textContent = '0';
     }
 }
 
