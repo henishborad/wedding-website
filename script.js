@@ -69,11 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         const formData = new FormData(rsvpForm);
+        const attendance = formData.get('attendance');
+        
         const rsvpData = {
             guestName: formData.get('guestName'),
             email: formData.get('email'),
-            attendance: formData.get('attendance'),
-            guestCount: formData.get('guestCount') || 0,
+            attendance: attendance,
+            // Set guestCount to 0 if not attending, otherwise use the selected value
+            guestCount: attendance === 'no' ? 0 : (formData.get('guestCount') || 1),
             message: formData.get('message') || '',
             dateSubmitted: firebase.firestore.Timestamp.now()
         };
