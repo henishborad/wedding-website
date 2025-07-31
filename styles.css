@@ -209,11 +209,18 @@ html {
 /* Sections */
 .section {
     padding: 4rem 0;
+    background-color: #ffffff; /* Default white background */
 }
 
-.section:nth-child(even) {
-    background-color: #f8f9fa;
+/* Specific section backgrounds for alternating effect */
+#schedule, #registry {
+    background-color: #f8f9fa; /* Light gray background */
 }
+
+/* Removing nth-child selector since we're hiding some sections */
+/* .section:nth-child(even) {
+    background-color: #f8f9fa;
+} */
 
 .section h2 {
     text-align: center;
@@ -361,7 +368,11 @@ html {
     margin-bottom: 0.5rem;
 }
 
-/* Gallery Section */
+/* Gallery Section - Hidden from view but kept in codebase */
+#gallery {
+    display: none; /* Hide the gallery section */
+}
+
 .gallery-intro {
     text-align: center;
     font-size: 1.2rem;
@@ -963,10 +974,16 @@ html {
 /* Responsive adjustments for scroll arrow */
 @media (max-width: 768px) {
     .scroll-indicator {
-        bottom: 30px;
+        bottom: 80px; /* Move arrow higher up on mobile */
     }
     
     .scroll-arrow {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-indicator {
+        bottom: 100px; /* Move even higher on very small screens */
     }
 }
