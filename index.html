@@ -305,33 +305,14 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 Archana & Henish. Can't wait to celebrate with you!</p>
-            <div class="admin-panel">
-                <button id="adminToggle" class="admin-button">Admin Panel</button>
-                <div id="adminContent" class="admin-content">
-                    <h3>RSVP Management</h3>
-                    <div class="admin-stats">
-                        <div class="stat-item">
-                            <span id="totalRsvps">0</span>
-                            <label>Total RSVPs</label>
-                        </div>
-                        <div class="stat-item">
-                            <span id="attendingCount">0</span>
-                            <label>Attending</label>
-                        </div>
-                        <div class="stat-item">
-                            <span id="notAttendingCount">0</span>
-                            <label>Not Attending</label>
-                        </div>
-                    </div>
-                    <div class="admin-actions">
-                        <button onclick="exportRSVPs()" class="admin-action-btn">Export RSVPs</button>
-                        <button onclick="clearRSVPs()" class="admin-action-btn danger">Clear All RSVPs</button>
-                    </div>
-                </div>
-            </div>
+<!-- Admin panel removed as requested -->
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="script.js"></script>
 </body>
 

@@ -1,8 +1,24 @@
-// Global variable to track admin mode
-let isAdmin = false;
+// Global variables
+// No admin functionality needed
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD1vGaWjiNYRU1j0lxSjpbUhBeP1fbc4pg",
+  authDomain: "wedding-rsvp-6a2e9.firebaseapp.com",
+  projectId: "wedding-rsvp-6a2e9",
+  storageBucket: "wedding-rsvp-6a2e9.firebasestorage.app",
+  messagingSenderId: "506604661121",
+  appId: "1:506604661121:web:3ce481713d759e25d36080"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    
     // Check RSVP deadline
     checkRSVPDeadline();
     
@@ -58,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
             email: formData.get('email'),
             attendance: formData.get('attendance'),
             guestCount: formData.get('guestCount') || 0,
-            message: formData.get('message') || ''
+            message: formData.get('message') || '',
+            dateSubmitted: firebase.firestore.Timestamp.now()
         };
 
         // Validate email
@@ -67,20 +84,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Save to localStorage
-        try {
-            const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
-            rsvps.push(rsvpData);
-            localStorage.setItem('weddingRSVPs', JSON.stringify(rsvps));
-            // Only update admin stats if in admin mode
-            if (isAdmin) {
-                updateAdminStats();
-            }
-            showMessage('RSVP submitted successfully!', 'success');
-            rsvpForm.reset();
-        } catch (err) {
-            showMessage('Error saving RSVP. Please try again.', 'error');
-        }
+        // Save to Firebase
+        saveRsvpToFirestore(rsvpData)
+            .then(() => {
+                showMessage('RSVP submitted successfully!', 'success');
+                rsvpForm.reset();
+            })
+            .catch(error => {
+                console.error("Error adding RSVP: ", error);
+                showMessage('Error saving RSVP. Please try again.', 'error');
+            });
     });
 
     function showMessage(text, type) {
@@ -116,36 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         photoModal.style.display = 'none';
     });
 
-    // Admin Panel - Only show if URL has ?admin=true
-    const adminToggle = document.getElementById('adminToggle');
-    const adminPanel = document.getElementById('adminContent');
-    
-    // Check URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    isAdmin = urlParams.get('admin') === 'true';
-    
-    // Only show admin button if admin parameter is true
-    if (isAdmin) {
-        adminToggle.style.display = 'inline-block';
-        
-        adminToggle.addEventListener('click', () => {
-            adminPanel.classList.toggle('show');
-            updateAdminStats();
-        });
-    } else {
-        // Hide admin button if not in admin mode
-        adminToggle.style.display = 'none';
-    }
-
-    function updateAdminStats() {
-        const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
-        const attendingRsvps = rsvps.filter(r => r.attendance === 'yes');
-        const totalGuests = attendingRsvps.reduce((sum, rsvp) => sum + parseInt(rsvp.guestCount || 1), 0);
-        
-        document.getElementById('totalRsvps').textContent = rsvps.length;
-        document.getElementById('attendingCount').textContent = totalGuests;
-        document.getElementById('notAttendingCount').textContent = rsvps.filter(r => r.attendance === 'no').length;
-    }
+    // Admin functionality removed
 
     // Registry Links
     document.querySelectorAll('.registry-link').forEach(link => {
@@ -219,35 +203,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 500);
 });
 
-// RSVP Export/Clear
-function exportRSVPs() {
-    const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
-    const csv = [
-        ['Name', 'Email', 'Attending', 'Guests', 'Message'],
-        ...rsvps.map(r => [
-            r.guestName, r.email, r.attendance, r.guestCount, r.message
-        ])
-    ].map(e => e.join(',')).join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'wedding-rsvps.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-function clearRSVPs() {
-    if (confirm('Clear all RSVPs?')) {
-        localStorage.removeItem('weddingRSVPs');
-        // Update admin stats to show zeros
-        const rsvps = [];
-        document.getElementById('totalRsvps').textContent = '0';
-        document.getElementById('attendingCount').textContent = '0';
-        document.getElementById('notAttendingCount').textContent = '0';
+// Firestore Functions
+async function saveRsvpToFirestore(rsvpData) {
+    try {
+        const docRef = await db.collection("rsvps").add(rsvpData);
+        console.log("RSVP saved with ID: ", docRef.id);
+        return docRef;
+    } catch (error) {
+        console.error("Error saving RSVP to Firestore: ", error);
+        throw error;
     }
 }
+
+// Admin functionality removed
 
 // Copy to Clipboard
 function copyToClipboard(text) {
@@ -255,3 +223,6 @@ function copyToClipboard(text) {
         alert('Copied to clipboard!');
     });
 }
+
+// Only keep non-admin functions available globally
+window.copyToClipboard = copyToClipboard;
