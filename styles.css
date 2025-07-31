@@ -60,12 +60,14 @@ html {
 }
 
 .couple-names {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Playfair Display', serif;
     font-size: 4rem;
     font-weight: 700;
     color: #2c3e50;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .wedding-date {
@@ -592,6 +594,17 @@ html {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+.rsvp-closed-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2rem;
 }
 
 /* Registry Section */

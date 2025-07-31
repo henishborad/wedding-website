@@ -3,6 +3,9 @@ let isAdmin = false;
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Check RSVP deadline
+    checkRSVPDeadline();
+    
     // Countdown Timer
     const weddingDate = new Date('August 16, 2025 08:00:00').getTime();
     const countdownTimer = document.querySelector('.countdown-timer');
@@ -38,13 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const rsvpForm = document.getElementById('rsvpForm');
     const attendanceSelect = document.getElementById('attendance');
     const guestCountGroup = document.getElementById('guestCountGroup');
-    const dietaryGroup = document.getElementById('dietaryGroup');
     const rsvpMessage = document.getElementById('rsvpMessage');
 
     attendanceSelect.addEventListener('change', function() {
         const isAttending = this.value === 'yes';
         guestCountGroup.style.display = isAttending ? 'block' : 'none';
-        dietaryGroup.style.display = isAttending ? 'block' : 'none';
         document.getElementById('guestCount').required = isAttending;
     });
 
@@ -57,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
             email: formData.get('email'),
             attendance: formData.get('attendance'),
             guestCount: formData.get('guestCount') || 0,
-            dietary: formData.get('dietary') || '',
             message: formData.get('message') || ''
         };
 
@@ -154,6 +154,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // RSVP Deadline Check
+    function checkRSVPDeadline() {
+        const deadline = new Date('August 8, 2025 23:59:59 PDT');
+        const now = new Date();
+        const rsvpForm = document.getElementById('rsvpForm');
+        const closedMessage = document.getElementById('rsvp-closed-message');
+        
+        if (now > deadline) {
+            // RSVP period has ended
+            if (rsvpForm) rsvpForm.style.display = 'none';
+            if (closedMessage) closedMessage.style.display = 'block';
+        } else {
+            // RSVP is still open
+            if (rsvpForm) rsvpForm.style.display = 'block';
+            if (closedMessage) closedMessage.style.display = 'none';
+        }
+    }
+    
     // Mobile Menu Toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -205,9 +223,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function exportRSVPs() {
     const rsvps = JSON.parse(localStorage.getItem('weddingRSVPs') || '[]');
     const csv = [
-        ['Name', 'Email', 'Attending', 'Guests', 'Dietary', 'Message'],
+        ['Name', 'Email', 'Attending', 'Guests', 'Message'],
         ...rsvps.map(r => [
-            r.guestName, r.email, r.attendance, r.guestCount, r.dietary, r.message
+            r.guestName, r.email, r.attendance, r.guestCount, r.message
         ])
     ].map(e => e.join(',')).join('\n');
 
