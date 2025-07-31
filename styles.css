@@ -903,6 +903,47 @@ html {
     }
 }
 
+/* Scroll Down Arrow */
+.scroll-indicator {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 5;
+}
+
+.scroll-arrow {
+    color: #2c3e50;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    animation: bounce 2s infinite;
+    font-size: 2.5rem;
+    filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.15));
+}
+
+.scroll-arrow:hover {
+    color: #e74c3c;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.15));
+    }
+    40% {
+        transform: translateY(-20px);
+        filter: drop-shadow(0 25px 15px rgba(0, 0, 0, 0.2));
+    }
+    60% {
+        transform: translateY(-10px);
+        filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.18));
+    }
+}
+
 /* Animation */
 @keyframes fadeInUp {
     from {
@@ -917,4 +958,15 @@ html {
 
 .section {
     animation: fadeInUp 0.8s ease-out;
+}
+
+/* Responsive adjustments for scroll arrow */
+@media (max-width: 768px) {
+    .scroll-indicator {
+        bottom: 30px;
+    }
+    
+    .scroll-arrow {
+        font-size: 2rem;
+    }
 }
