@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
             email: formData.get('email'),
             attendance: attendance,
             // Set guestCount to 0 if not attending, otherwise use the selected value
-            guestCount: attendance === 'no' ? 0 : (formData.get('guestCount') || 1),
+            // Parse to integer to ensure it's stored as a number, not a string
+            guestCount: attendance === 'no' ? 0 : parseInt(formData.get('guestCount') || 1, 10),
             message: formData.get('message') || '',
             dateSubmitted: firebase.firestore.Timestamp.now()
         };
