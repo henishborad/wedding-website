@@ -215,8 +215,12 @@ html {
 }
 
 /* Specific section backgrounds for alternating effect */
-#schedule, #registry {
+#schedule {
     background-color: #f8f9fa; /* Light gray background */
+}
+
+#registry {
+    display: none;
 }
 
 /* Removing nth-child selector since we're hiding some sections */
