@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // RSVP Deadline Check
     function checkRSVPDeadline() {
-        const deadline = new Date('August 8, 2025 23:59:59 PDT');
+        const deadline = new Date('August 12, 2025 23:59:59 PDT');
         const now = new Date();
         const rsvpForm = document.getElementById('rsvpForm');
         const closedMessage = document.getElementById('rsvp-closed-message');
