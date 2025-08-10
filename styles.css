@@ -516,13 +516,6 @@ html {
 }
 
 /* RSVP Form */
-.rsvp-deadline {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #e74c3c;
-    margin-bottom: 2rem;
-    font-weight: bold;
-}
 
 .rsvp-form {
     max-width: 600px;
